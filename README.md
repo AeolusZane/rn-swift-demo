@@ -22,4 +22,5 @@ ios文件下 `pod install`
 RN组件setCount会更新Swift组件
 Swift组件长按会更新RN组件为Swift组件状态
 Swift组件单击，只更新自己状态
+
 ![](./result.gif)
