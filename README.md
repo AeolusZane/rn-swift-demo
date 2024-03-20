@@ -18,4 +18,8 @@ ios文件下 `pod install`
 `npm run start`
 
 ## 结果
+上面是RN组件，下面是Swift组件
+RN组件setCount会更新Swift组件
+Swift组件长按会更新RN组件为Swift组件状态
+Swift组件单击，只更新自己状态
 ![](./result.gif)
