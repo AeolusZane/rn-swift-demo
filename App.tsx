@@ -5,114 +5,77 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React,{Component} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TouchableOpacity,
   View,
+  requireNativeComponent,
+  UIManager,
+  findNodeHandle
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const CounterView = requireNativeComponent("CounterView") as any
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+export default class App extends Component {
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  counterRef:typeof CounterView
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  state = {
+    count: 1
   };
+  increment = () => {
+    this.setState({ count: this.state.count + 1 })
+  }
+  
+  update = (e:any) => {
+    this.setState({
+      count: e.nativeEvent.count
+    })
+  }
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+  updateNative = () => {
+    UIManager.dispatchViewManagerCommand(
+      findNodeHandle(this.counterRef),                     // 1
+      (UIManager as any)["CounterView"].Commands.updateFromManager, // 2
+      [this.state.count*10]                                   // 3
+    );
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={[styles.wrapper, styles.border]}
+          onPress={this.increment}
+          onLongPress={this.updateNative}
+        >
+          <Text style={styles.button}>
+            {this.state.count}
+          </Text>
+        </TouchableOpacity>
+        <CounterView style={styles.wrapper}
+          count={this.state.count}
+          onUpdate={this.update}
+          ref={(e: any) => this.counterRef = e}
+        />
+      </View>
+    );
+  }
 }
-
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1, alignItems: "stretch"
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  wrapper: {
+    flex: 1, alignItems: "center", justifyContent: "center"
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  border: {
+    borderColor: "#eee", borderBottomWidth: 1
   },
-  highlight: {
-    fontWeight: '700',
-  },
+  button: {
+    fontSize: 50, color: "orange"
+  }
 });
-
-export default App;
