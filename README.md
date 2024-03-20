@@ -16,3 +16,6 @@ ios文件下 `pod install`
 
 ## 运行
 `npm run start`
+
+## 结果
+![](./result.gif)
