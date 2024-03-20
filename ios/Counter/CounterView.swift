@@ -48,10 +48,11 @@ class CounterView: UIView {
     }
     
     @objc func sendUpdate(_ gesture: UILongPressGestureRecognizer) {
+      let newCount = count.intValue + 1 as NSNumber
       if gesture.state == .began {
         if onUpdate != nil {
           // our Event Emitter expects [AnyHashable:Any]
-          onUpdate!(["count": count])
+          onUpdate!(["count": newCount])
         }
       }
     }

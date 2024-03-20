@@ -19,8 +19,10 @@ ios文件下 `pod install`
 
 ## 结果
 - 上面是RN组件，下面是Swift组件
-- RN组件setCount会更新Swift组件
-- Swift组件长按会更新RN组件为Swift组件状态
+- Swift组件可以接受来自RN组件传入的参数，（比如传count，RN组件setCount就会更新Swift组件的count）
+- Swift组件长按会调用RN组件的回调（调用setCount），这时更新Swift自己的状态
 - Swift组件单击，只更新自己状态
+- 函数式组件
+- 长按RN组件，Swift组件变成RN组件的两倍
 
 ![](./result.gif)

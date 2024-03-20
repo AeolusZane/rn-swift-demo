@@ -5,7 +5,7 @@
  * @format
  */
 
-import React,{Component} from 'react';
+import React,{Component, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,53 +18,45 @@ import {
 
 const CounterView = requireNativeComponent("CounterView") as any
 
+export default function App(){
+  const [count, setCount] = useState(1)
+  const counterRef = React.useRef<typeof CounterView>(null)
 
-export default class App extends Component {
-
-  counterRef:typeof CounterView
-
-  state = {
-    count: 1
-  };
-  increment = () => {
-    this.setState({ count: this.state.count + 1 })
+  const increment = () => {
+    setCount(c=>c+1)
   }
   
-  update = (e:any) => {
-    this.setState({
-      count: e.nativeEvent.count
-    })
+  const update = (e:any) => {
+    setCount( e.nativeEvent.count)
   }
 
-  updateNative = () => {
+  const updateNative = () => {
     UIManager.dispatchViewManagerCommand(
-      findNodeHandle(this.counterRef),                     // 1
+      findNodeHandle(counterRef.current),                     // 1
       (UIManager as any)["CounterView"].Commands.updateFromManager, // 2
-      [this.state.count*10]                                   // 3
+      [count*2]                                   // 3
     );
   }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={[styles.wrapper, styles.border]}
-          onPress={this.increment}
-          onLongPress={this.updateNative}
-        >
-          <Text style={styles.button}>
-            {this.state.count}
-          </Text>
-        </TouchableOpacity>
-        <CounterView style={styles.wrapper}
-          count={this.state.count}
-          onUpdate={this.update}
-          ref={(e: any) => this.counterRef = e}
-        />
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={[styles.wrapper, styles.border]}
+        onPress={increment}
+        onLongPress={updateNative}
+      >
+        <Text style={styles.button}>
+          {count}
+        </Text>
+      </TouchableOpacity>
+      <CounterView style={styles.wrapper}
+        count={count}
+        onUpdate={update}
+        ref={counterRef}
+      />
+    </View>
+  );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1, alignItems: "stretch"
