@@ -1,4 +1,4 @@
-wow，居然上了github-chinese-top-charts榜单
+上了github-chinese-top-charts榜单
 
 https://github.com/GrowingGit/GitHub-Chinese-Top-Charts/blob/c72fb741690eee4ab2590bd9376246e60424c870/content/charts/new_repo/software/Objective-C.md
 
